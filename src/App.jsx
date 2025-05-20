@@ -2,7 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Exam1, { Exam2 } from './components/Exam1';
+import Exam1 from './components/Exam1';
+import Exam2 from './components/Exam2';
 
 function App() {
   // 상태(state)
