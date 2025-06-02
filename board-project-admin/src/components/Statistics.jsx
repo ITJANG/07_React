@@ -2,24 +2,11 @@ import { useEffect, useState } from "react";
 import { axiosAPI } from "../api/axiosAPI";
 
 export default function Statistics() {
-  const [newMemberData, setNewMember] = useState([]);
   const [readCountData, setReadCountData] = useState(null);
   const [likeCountData, setLikeCountData] = useState(null);
   const [commentCountData, setCommentCountData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 신규 회원 조회
-  const getNewMember = async () => {
-    try {
-      const resp = await axiosAPI.get("/admin/newMember");
-      console.log(resp.data);
-      if (resp.status == 200) {
-        setNewMember(resp.data);
-      }
-    } catch (error) {
-      console.log("신규 회원 조회 중 예외 발생", error);
-    }
-  };
 
   // 최대 조회수 게시글 조회
   const getMaxReadCount = async () => {
@@ -58,10 +45,25 @@ export default function Statistics() {
     }
   };
 
+
+  const [newMemberData, setNewMemberData] = useState([]);
+  // 신규 회원 조회
+  const getNewMemberData = async () => {
+    try {
+      const resp = await axiosAPI.get("/admin/newMember");
+      console.log(resp.data);
+      if (resp.status == 200) {
+        setNewMemberData(resp.data);
+      }
+    } catch (error) {
+      console.log("신규 회원 조회 중 예외 발생", error);
+    }
+  };
+
   // 컴포넌트가 처음 마운트 될 때 1번만 실행
   // -> Statistics 컴포넌트가 화면에 마운트 될 때 서버로 세가지 데이터 요청, 응답 받아야함
   useEffect(() => {
-    getNewMember();
+    getNewMemberData();
     getMaxReadCount();
     getMaxLikeCount();
     getMaxCommentCount();
@@ -85,22 +87,26 @@ export default function Statistics() {
     return (
       <div>
         <section className="statistics-section">
-          <h2>신규 가입 회원 ({member.memberCount})</h2>
+          <h2>신규 가입 회원 ({newMemberData.length})</h2>
           <h4>[7일 이내 가입 회원]</h4>
           <tr>
-            <td>회원번호</td>
-            <td>이메일</td>
-            <td>닉네임</td>
-            <td>가입일</td>
+            <thead>
+              <td>회원번호</td>
+              <td>이메일</td>
+              <td>닉네임</td>
+              <td>가입일</td>
+            </thead>
           </tr>
-          {newMemberData.map((member) => (
-            <tr key={member.memberNo}>
-              <td>{member.memberNo}</td>
-              <td>{member.memberEmail}</td>
-              <td>{member.memberNickname}</td>
-              <td>{member.enrollDate}</td>
-            </tr>
-          ))}
+          <tbody>
+            {newMemberData.map((member) => (
+              <tr key={member.memberNo}>
+                <td>{member.memberNo}</td>
+                <td>{member.memberEmail}</td>
+                <td>{member.memberNickname}</td>
+                <td>{member.enrollDate}</td>
+              </tr>
+            ))}
+          </tbody>
         </section>
 
         <section className="statistics-section">
