@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from "react";
 import { axiosAPI } from "../api/axiosAPI";
 
@@ -79,6 +80,7 @@ export default function Restore() {
       console.log(deleteBoards);
     }
   }, [deleteMembers, deleteBoards]);
+
   if (isLoading) {
     return <h1>Loading</h1>;
   } else {
